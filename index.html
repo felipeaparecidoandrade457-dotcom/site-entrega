@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rota de Entregas - Mercado Pequeno Mundo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            background: #fff;
+            max-width: 500px;
+            margin: auto;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .logo {
+            text-align: center;
+            font-weight: bold;
+            color: #27ae60;
+            margin-bottom: 20px;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #27ae60;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            margin-top: 15px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #219150;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="logo">🛒 Mercado Pequeno Mundo</div>
+        
+        <input type="text" id="nome" placeholder="Seu nome">
+        <input type="text" id="rua" placeholder="Rua">
+        <input type="text" id="numero" placeholder="Número">
+        <select id="bairro">
+            <option>Centro</option>
+            <option>Centro C\u00edvico</option>
+        </select>
+        
+        <label>Gás</label>
+        <select id="gas">
+            <option>Não</option>
+            <option>Sim</option>
+        </select>
+        
+        <label>Rodo / Observação</label>
+        <select id="rodo">
+            <option>Não</option>
+            <option>Sim</option>
+        </select>
+        
+        <textarea id="observacao" placeholder="Observações"></textarea>
+        
+        <button onclick="enviarPedido()">Enviar Pedido</button>
+    </div>
+
+    <script>
+        // Ponto fixo de saída
+        const origem = "Mercado Pequeno Mundo, Angélica, Mato Grosso do Sul, Brasil";
+
+        // Função para montar o endereço completo
+        function montarEndereco() {
+            let rua = document.getElementById('rua').value;
+            let numero = document.getElementById('numero').value;
+            let bairro = document.getElementById('bairro').value;
+            return `${rua}, ${numero}, ${bairro}, Angélica, Mato Grosso do Sul, Brasil`;
+        }
+
+        // Função para enviar o pedido
+        function enviarPedido() {
+            let nome = document.getElementById('nome').value;
+            let endereco = montarEndereco();
+            let gas = document.getElementById('gas').value;
+            let rodo = document.getElementById('rodo').value;
+            let observacao = document.getElementById('observacao').value;
+
+            if (!endereco.toLowerCase().includes("angélica")) {
+                alert("Só aceitamos entregas em Angélica MS!");
+                return;
+            }
+
+            let mensagem = 
+`📦 Pedido de Entrega
+
+👤 Nome: ${nome}
+📍 Endereço: ${endereco}
+🔥 Gás: ${gas}
+🧹 Rodo/Observação: ${rodo}
+📝 Observação: ${observacao}`;
+
+            let numeroWpp = "5567998638153"; // Substituir pelo seu número
+            let mapa = `https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(origem)}&destination=${encodeURIComponent(endereco)}&travelmode=driving&region=br`;
+
+            mensagem += `\n🚗 Rota: ${mapa}`;
+
+            window.open(`https://wa.me/${numeroWpp}?text=${encodeURIComponent(mensagem)}`, "_blank");
+        }
+    </script>
+
+</body>
+</html>
